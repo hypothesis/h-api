@@ -32,7 +32,7 @@ class Validator(Draft7Validator):
 class Schema:
     """JSON Schema loader."""
 
-    BASE_DIR = resource_filename("h", "h_api/resources/schema/")
+    BASE_DIR = resource_filename("h_api", "resources/schema/")
     LOCAL_RESOLVER = RefResolver(base_uri="file://" + BASE_DIR, referrer=None)
 
     @classmethod

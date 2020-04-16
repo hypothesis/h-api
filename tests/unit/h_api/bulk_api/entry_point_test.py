@@ -115,7 +115,7 @@ class TestBulkAPI:
 
     @pytest.fixture
     def nd_json(self):
-        return resource_string("tests", "h_api/fixtures/bulk_api.ndjson").decode(
+        return resource_string("tests", "unit/h_api/fixtures/bulk_api.ndjson").decode(
             "utf-8"
         )
 

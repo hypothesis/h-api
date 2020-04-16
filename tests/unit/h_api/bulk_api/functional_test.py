@@ -100,4 +100,4 @@ class TestBulkAPIFunctional:
 
     @pytest.fixture
     def ndjson_bytes(self):
-        return BytesIO(resource_string("tests", "h_api/fixtures/bulk_api.ndjson"))
+        return BytesIO(resource_string("tests", "unit/h_api/fixtures/bulk_api.ndjson"))
