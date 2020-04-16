@@ -56,6 +56,10 @@ class CommandProcessor:  # pylint: disable=too-few-public-methods
 
         self._check_command_count(final=True)
 
+        if not self.reports or self.config.view is ViewType.NONE:
+            # Nothing to report!
+            return None
+
         return self._report_back()
 
     def _process_single_command(self, command):
@@ -189,14 +193,6 @@ class CommandProcessor:  # pylint: disable=too-few-public-methods
             self.reports[data_type].extend(reports)
 
     def _report_back(self):
-        if not self.reports or self.config.view is ViewType.NONE:
-            # Nothing to report!
-            return
-
-        if self.config.view is not ViewType.BASIC:
-            # This shouldn't be possible, but belt and braces
-            raise ValueError(f"Unknown configuration view type {self.config.view}")
-
         for data_type, reports in self.reports.items():
             for report in reports:
                 yield JSONAPIData.create(data_type=data_type, _id=report.public_id).raw

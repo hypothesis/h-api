@@ -2,7 +2,7 @@ import pytest
 from h_matchers import Any
 from jsonschema import Draft7Validator
 
-from h_api.exceptions import JSONAPIError, SchemaValidationError
+from h_api.exceptions import JSONAPIError, SchemaValidationError, SimpleJSONAPIError
 from h_api.model.json_api import JSONAPIErrorBody
 
 
@@ -19,11 +19,24 @@ class TestJSONAPIExcepion:
         assert error.as_dict() == {"errors": [body.raw]}
 
 
+class TestSimpleJSONAPIError:
+    def test_it(self):
+        class MyError(SimpleJSONAPIError):
+            http_status = 299
+
+        error = MyError("Something wrong")
+
+        assert error.as_dict() == {
+            "errors": [{"code": "MyError", "status": "299", "title": "Something wrong"}]
+        }
+
+
 class TestSchemaValidationError:
     def test_creation(self, json_schema_error, JSONAPIErrorBody):
         error = SchemaValidationError([json_schema_error])
 
-        assert error.error_bodies == [JSONAPIErrorBody.create.return_value]
+        # pylint: disable=protected-access
+        assert error._error_bodies() == [JSONAPIErrorBody.create.return_value]
 
         JSONAPIErrorBody.create.assert_called_once_with(
             error,

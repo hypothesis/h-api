@@ -165,14 +165,15 @@ class TestCommandProcessor:
             {DataType.USER: [Any.instance_of(Report)]}
         )
 
-    def test_reports_are_not_stored_if_view_is_None(
+    def test_reports_are_not_produced_or_stored_if_view_is_None(
         self, command_processor, commands, config_command
     ):
         assert config_command.body.view is ViewType.NONE
 
-        command_processor.process(commands)
+        result = command_processor.process(commands)
 
         assert not command_processor.reports
+        assert result is None
 
     def test_it_generates_basic_reports(
         self, command_processor, commands, config_command

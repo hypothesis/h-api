@@ -1,8 +1,10 @@
 """Implementations of an 'Executor' responsible for running bulk commands."""
+from abc import ABC, abstractmethod
+
 from h_api.bulk_api.model.report import Report
 
 
-class Executor:
+class Executor(ABC):
     """A callback to provide concrete functionality for actions in BulkJob."""
 
     def configure(self, config):
@@ -15,6 +17,7 @@ class Executor:
         :param config: A `Configuration` object
         """
 
+    @abstractmethod
     def execute_batch(self, command_type, data_type, default_config, batch):
         """Execute the actions specified, returning any referenced ids.
 
@@ -31,7 +34,6 @@ class Executor:
         :param batch: A list of Command models
         :return: A list of `Report` objects
         """
-        raise NotImplementedError()
 
     def get_items(self, data_type, ids, config):
         """Return the items identified by `ids`.

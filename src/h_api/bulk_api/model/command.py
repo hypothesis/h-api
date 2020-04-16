@@ -158,8 +158,7 @@ class UpsertCommand(DataCommand):
 
         for command in batch:
             query = command.body.meta.get("query")
-            if not query:
-                continue
+            assert query, "Query found for command"
 
             new_attrs = deepcopy(query)
             new_attrs.update(command.body.attributes)

@@ -1,5 +1,7 @@
 """Shared exceptions used in H-API."""
 
+from abc import ABC, abstractmethod
+
 from h_api.model.json_api import JSONAPIError as JSONAPIErrorModel
 from h_api.model.json_api import JSONAPIErrorBody
 
@@ -8,15 +10,14 @@ class HAPIError(Exception):
     """An abstract exception for all error situations in HAPI."""
 
 
-class JSONAPIError(HAPIError):
+class JSONAPIError(ABC, HAPIError):
     """An error which can turn itself into a a JSON API error response."""
 
     http_status = None
 
+    @abstractmethod
     def _error_bodies(self):
         """Get the instances of JSONAPIErrorBody representing this error."""
-
-        raise NotImplementedError()
 
     def as_dict(self):
         """Get a JSON API compatible dict representing this error."""

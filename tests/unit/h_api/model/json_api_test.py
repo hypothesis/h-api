@@ -1,3 +1,5 @@
+from h_matchers import Any
+
 from h_api.enums import DataType
 from h_api.model.json_api import JSONAPIData, JSONAPIError, JSONAPIErrorBody
 
@@ -81,3 +83,8 @@ class TestJSONAPIData:
         data = JSONAPIData.create("group")
 
         assert data.raw == {"data": {"type": "group"}}
+
+    def test_create_with_id_reference_but_no_meta(self):
+        data = JSONAPIData.create("group", id_reference="ref")
+
+        assert data.raw == {"data": Any.dict.containing({"meta": {"$anchor": "ref"}})}

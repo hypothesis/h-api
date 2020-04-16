@@ -36,11 +36,11 @@ class CommandBuilder:
         if command.type is CommandType.CREATE:
             return CreateCommand(raw)
 
-        if command.type is CommandType.UPSERT:
-            return UpsertCommand(raw)
+        assert (
+            command.type is CommandType.UPSERT
+        ), "Last remaining acceptable value found"
 
-        # As we use an enum, this really shouldn't happen
-        raise ValueError(f"Unknown data type: {command.type}")
+        return UpsertCommand(raw)
 
     @classmethod
     def configure(cls, effective_user, total_instructions, view=ViewType.NONE):

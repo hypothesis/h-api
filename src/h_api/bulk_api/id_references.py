@@ -75,5 +75,4 @@ class IdReferences:
                 continue
 
             id_ref = relationship["id"].get(cls.REF_KEY)
-            if id_ref is not None:
-                yield (DataType(relationship["type"]), id_ref, "id", relationship)
+            yield (DataType(relationship["type"]), id_ref, "id", relationship)

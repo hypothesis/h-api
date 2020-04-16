@@ -26,20 +26,16 @@ class Model:
         if validate and raw is not None:
             self.validate()
 
-    def validate(self, error_title=None):
+    def validate(self):
         """Validate the contents of this object against the schema (if any).
 
-        If `validation_error_title` is set, then this will be used as a default
-        `error_title`.
+        If `validation_error_title` is set, then this will be used as the
+        validation error message.
 
-        :param error_title: A custom error message when errors are found
         :raise SchemaValidationError: When errors are found
         """
-        if error_title is None:
-            error_title = self.validation_error_title
-
         if self.validator is not None:
-            self.validator.validate_all(self.raw, error_title)
+            self.validator.validate_all(self.raw, self.validation_error_title)
 
     @classmethod
     def extract_raw(cls, item):
