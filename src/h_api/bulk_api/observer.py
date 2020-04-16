@@ -5,6 +5,8 @@ import json
 
 from h_api.enums import CommandStatus
 
+# pylint: disable=too-few-public-methods
+
 
 class Observer:
     """A callback for being informed of every command processed by BulkJob.
@@ -21,7 +23,6 @@ class Observer:
         :param command: Command being inspected
         :param status: Status of the command
         """
-        pass
 
 
 class SerialisingObserver(Observer):

@@ -21,6 +21,8 @@ class Configuration(Model):
 
         :param effective_user: User to execute the command as
         :param total_instructions: Number of instructions (including this)
+        :param view: Return style requested by the client
+        :return: A Configuration object
         """
         return cls(
             {

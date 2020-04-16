@@ -21,6 +21,8 @@ class BulkAPI:
         :param lines: An iterator of strings
         :param executor: `Executor` to process batches of commands
         :param observer: `Observer` to view individual commands
+        :raise TypeError: If the observer or executor are the wrong type
+        :return: A BulkAPI instance
         """
         if observer is None:
             observer = Observer()
@@ -40,6 +42,9 @@ class BulkAPI:
         """Read from a string of NDJSON.
 
         Convenience wrapper for `from_lines`.
+
+        :return: An iterator of commands
+        :rtype: Iterator[Command]
         """
 
         return cls.from_lines(cls._string_to_lines(string), executor, observer)
@@ -49,6 +54,9 @@ class BulkAPI:
         """Read from a stream of NDJSON bytes.
 
         Convenience wrapper for `from_lines`.
+
+        :return: An iterator of commands
+        :rtype: Iterator[Command]
         """
 
         return cls.from_lines(cls._bytes_to_lines(byte_stream), executor, observer)
@@ -72,6 +80,8 @@ class BulkAPI:
         """Check a series of commands for correctness and create an NDJSON string.
 
         Convenience wrapper for `to_stream`.
+
+        :return: An NDJSON string
         """
 
         handle = StringIO()
@@ -86,6 +96,8 @@ class BulkAPI:
 
         :param lines: An iterable of JSON strings
         :return: A generator of `Command` objects
+        :rtype: Iterator[Command]
+        :raise InvalidJSONError: when invalid JSON is encountered
         """
         for line_number, line in enumerate(lines):
             if not line:
@@ -93,9 +105,9 @@ class BulkAPI:
 
             try:
                 data = json.loads(line)
-            except JSONDecodeError as e:
+            except JSONDecodeError as err:
                 raise InvalidJSONError(
-                    f"Invalid JSON on line {line_number}: {e.args[0]}"
+                    f"Invalid JSON on line {line_number}: {err.args[0]}"
                 )
 
             # Try catch JSON errors here
@@ -106,7 +118,8 @@ class BulkAPI:
         """Split a string on new-lines.
 
         :param string: A string to split
-        :return: A generator of strings containing single lines
+        :return: An iterator of separate lines
+        :rtype: Iterator[str]
         """
 
         lines = (line.strip() for line in string.strip().split("\n"))
@@ -117,13 +130,15 @@ class BulkAPI:
         """Split a stream of bytes on new-lines.
 
         :param stream: A file-like object
-        :return: A generator of strings containing single lines
+        :param chunk_size: Bytes to read at one time
+        :return: An iterator of individual lines
+        :rtype: Iterator[str]
         """
         line = b""
 
         while True:
             block = stream.read(chunk_size)
-            if not len(block):
+            if not block:
                 break
 
             # As long as our block contains new lines, split strings out of it

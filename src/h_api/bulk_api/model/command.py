@@ -10,6 +10,7 @@ from h_api.bulk_api.model.data_body import (
     UpsertUser,
 )
 from h_api.enums import CommandType, DataType
+from h_api.exceptions import UnsupportedOperationError
 from h_api.model.base import Model
 from h_api.schema import Schema
 
@@ -20,7 +21,7 @@ class Command(Model):
     validator = Schema.get_validator("bulk_api/wrapper.json")
     validation_error_title = "Cannot interpret command as the wrapper is malformed"
 
-    def validate(self):
+    def validate(self):  # pylint: disable=arguments-differ
         """Validate this object and it's body meet their declared schema."""
         super().validate()
 
@@ -61,7 +62,7 @@ class ConfigCommand(Command):
     """A command containing job configuration instructions."""
 
     @classmethod
-    def create(cls, config):
+    def create(cls, config):  # pylint: disable=arguments-differ
         """Create a new ConfigCommand from a configuration instance.
 
         :param config: A Configuration object
@@ -98,18 +99,20 @@ class DataCommand(Command):
         """Get the appropriate body object for this command.
 
         :return: A different class depending on `DataType` and `data_classes`
-        :raise KeyError: If no type can be found for the given `DataType`
+        :raise UnsupportedOperationError: If no type can be found for the
+                                          given `DataType`
         """
         body = super().body
 
         data_type = DataType(body["data"]["type"])
 
         try:
+            # pylint: disable=unsubscriptable-object
+            # It's subscriptable if child classes have set it to a dict
             class_ = self.data_classes[data_type]
 
         except KeyError:
-            # TODO! A custom error would be nice here
-            raise TypeError("Invalid action on data type")
+            raise UnsupportedOperationError("Invalid action on data type")
 
         # Don't validate this all the time, we did it on the way in. If we have
         # mutated it it might not match the schema we except from clients, but
@@ -127,7 +130,6 @@ class DataCommand(Command):
         :param default_config: A dict of configuration global to all commands
                                in the batch
         """
-        pass
 
 
 class CreateCommand(DataCommand):

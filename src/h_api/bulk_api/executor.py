@@ -14,7 +14,6 @@ class Executor:
 
         :param config: A `Configuration` object
         """
-        pass
 
     def execute_batch(self, command_type, data_type, default_config, batch):
         """Execute the actions specified, returning any referenced ids.
@@ -48,8 +47,6 @@ class Executor:
         :param config: A dict of configuration options to modify processing
         :return: An iterable of data objects
         """
-
-        pass
 
 
 class AutomaticReportExecutor(Executor):

@@ -19,6 +19,7 @@ class Model:
         """Create a model.
 
         :param raw: The raw data to add to this object
+        :param validate: Immediately validate the object on creation
         """
         self.raw = raw
 

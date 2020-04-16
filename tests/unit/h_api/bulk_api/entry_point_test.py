@@ -13,6 +13,8 @@ from h_api.bulk_api.model.command import Command
 from h_api.bulk_api.observer import Observer
 from h_api.exceptions import InvalidJSONError
 
+# pylint: disable=protected-access
+
 
 class TestBulkAPI:
     # This is a glue library, so there's not much to do here but test the
@@ -37,9 +39,9 @@ class TestBulkAPI:
         self._assert_process_called_with_generator_of_commands(CommandProcessor)
 
     def test__bytes_to_lines(self):
-        bytes = BytesIO(b"\nline_1\n\nlong_middle_line_2\nline_3")
+        bytes_ = BytesIO(b"\nline_1\n\nlong_middle_line_2\nline_3")
 
-        lines = BulkAPI._bytes_to_lines(bytes, chunk_size=8)
+        lines = BulkAPI._bytes_to_lines(bytes_, chunk_size=8)
 
         assert isinstance(lines, GeneratorType)
         assert list(lines) == [b"line_1", b"long_middle_line_2", b"line_3"]

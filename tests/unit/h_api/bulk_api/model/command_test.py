@@ -12,7 +12,7 @@ from h_api.bulk_api.model.command import (
 from h_api.bulk_api.model.config_body import Configuration
 from h_api.bulk_api.model.data_body import UpsertUser
 from h_api.enums import CommandType, DataType
-from h_api.exceptions import SchemaValidationError
+from h_api.exceptions import SchemaValidationError, UnsupportedOperationError
 from h_api.model.base import Model
 
 
@@ -63,7 +63,7 @@ class TestCommand:
         assert command.raw == [CommandType.CREATE.value, body]
 
     @pytest.fixture
-    def model(self, upsert_user_body):
+    def model(self):
         return create_autospec(Model, instance=True)
 
 
@@ -96,7 +96,7 @@ class TestDataCommand:
         assert isinstance(command.body, UpsertUser)
 
     def test_we_cannot_create_another_type(self, UpsertUserCommand, upsert_group_body):
-        with pytest.raises(TypeError):
+        with pytest.raises(UnsupportedOperationError):
             UpsertUserCommand([CommandType.CREATE.value, upsert_group_body])
 
     @pytest.fixture

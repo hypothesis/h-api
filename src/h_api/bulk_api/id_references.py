@@ -66,6 +66,7 @@ class IdReferences:
 
         :param body: Raw JSON API compatible data to search
         :return: A list of tuples with data type, reference, key and parent
+        :rtype: Iterator[tuple]
         """
 
         for relationship in body["data"].get("relationships", {}).values():

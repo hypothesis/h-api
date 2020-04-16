@@ -11,7 +11,7 @@ from h_api.exceptions import CommandSequenceError, InvalidDeclarationError
 from h_api.model.json_api import JSONAPIData
 
 
-class CommandProcessor:
+class CommandProcessor:  # pylint: disable=too-few-public-methods
     """Manager which will check and run a number of bulk API commands.
 
     The manager is responsible for:
@@ -103,6 +103,11 @@ class CommandProcessor:
         """Check the command count matches expectations.
 
         :param final: This is the final count check, not incremental
+
+        :raise CommandSequenceError: When performing final count with no
+                                     commands
+        :raise InvalidDeclarationError: When commands processed do not match
+                                        the declared amount
         """
 
         total = self.config.total_instructions if self.config else None
@@ -159,6 +164,9 @@ class CommandProcessor:
         :param data_type: The data type these references are for
         :param batch: The batch of commands containing id references
         :param reports: A list of Report objects
+
+        :raise TypeError: If the passed reports are not Report obejcts
+        :raise IndexError: If the number of reports does not match the batch
         """
         if not isinstance(reports, list) or any(
             not isinstance(item, Report) for item in reports

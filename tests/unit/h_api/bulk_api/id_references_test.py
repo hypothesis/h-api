@@ -12,6 +12,7 @@ class TestIdReferences:
 
         id_refs.add_concrete_id(DataType.GROUP.value, "my_ref", "real_id")
 
+        # pylint: disable=protected-access
         assert id_refs._ref_to_concrete[DataType.GROUP]["my_ref"] == "real_id"
 
     def test_we_can_fill_out_a_reference(self, group_membership_body):

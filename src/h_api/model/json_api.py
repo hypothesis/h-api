@@ -12,12 +12,16 @@ class JSONAPIError(Model):
         """Create a new error from the provided error details.
 
         :param error_bodies: Instances of JSONAPIErrorBody or equivalent dicts
+        :return: A JSONAPIError instance
         """
         return cls({"errors": [cls.extract_raw(body) for body in error_bodies]})
 
 
 class JSONAPIErrorBody(Model):
     """A JSON API error body."""
+
+    # pylint: disable=too-many-arguments
+    # I know pylint... I know
 
     @classmethod
     def create(
@@ -45,9 +49,11 @@ class JSONAPIErrorBody(Model):
 class JSONAPIData(Model):
     """A single JSON API data object (request or response)."""
 
-    # TODO! - This would be nice but introduces a circular dependency with
-    # Schema as it needs the error stuff above via SchemaValidationError
     # schema = Schema.get_validator('json_api.json#/$defs/document')
+    # This would be nice but introduces a circular dependency with
+    # Schema as it needs the error stuff above via SchemaValidationError
+
+    # pylint: disable=too-many-arguments
 
     @classmethod
     def create(
@@ -80,7 +86,7 @@ class JSONAPIData(Model):
         )
 
     @property
-    def id(self):
+    def id(self):  # pylint: disable=invalid-name
         """Get the id."""
 
         return self._data["id"]
@@ -128,4 +134,3 @@ class JSONAPIData(Model):
     @property
     def _data(self):
         return self.raw["data"]
-

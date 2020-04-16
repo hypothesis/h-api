@@ -65,7 +65,7 @@ class TestCommandBatcher:
         batch.batch = [other_command]
 
     def test_add_fails_if_we_return_to_a_command_type(
-        self, batch, on_flush, command, other_command
+        self, batch, command, other_command
     ):
         self.add_commands(batch, [command, other_command])
 
@@ -91,6 +91,7 @@ class TestCommandBatcher:
 
     @pytest.fixture
     def on_flush(self):
+        # pylint: disable=unused-argument
         def on_flush(command_type, data_type, batch):
             pass  # pragma: no cover
 

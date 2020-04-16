@@ -15,7 +15,7 @@ class UpsertBody(JSONAPIData):
     """Fields from the attributes to place into the query."""
 
     @classmethod
-    def create(cls, attributes, id_reference):
+    def create(cls, attributes, id_reference):  # pylint: disable=arguments-differ
         """Create an upsert body with query.
 
         This method will use the declared `data_type` and `query_fields` to
@@ -24,6 +24,7 @@ class UpsertBody(JSONAPIData):
 
         :param attributes: The main payload (also used to create the query)
         :param id_reference: The user provided reference for this object
+        :return: An UpsertBody instance
         """
         query = {field: attributes.pop(field, None) for field in cls.query_fields}
 
@@ -63,12 +64,12 @@ class CreateGroupMembership(JSONAPIData):
     validator = Schema.get_validator("bulk_api/command/create_group_membership.json")
 
     @classmethod
-    def create(cls, user_ref, group_ref):
+    def create(cls, user_ref, group_ref):  # pylint: disable=arguments-differ
         """Create a create group membership body for adding users to groups.
 
         :param user_ref: Custom user reference
         :param group_ref: Custom group reference
-        :return:
+        :return: A CreateGroupMembership instance
         """
         return super().create(
             DataType.GROUP_MEMBERSHIP,
@@ -99,10 +100,13 @@ class CreateGroupMembership(JSONAPIData):
         return _IdRef(self.relationships["group"]["data"]["id"])
 
 
-class _IdRef:
+class _IdRef:  # pylint: disable=too-few-public-methods
     """A value object which represents an id reference or concrete id."""
 
     def __init__(self, value):
+        # pylint: disable=invalid-name
+        # We're using "id"... fight me
+
         if isinstance(value, dict):
             self.id, self.ref = None, value.get("$ref")
         else:
