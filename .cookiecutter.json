@@ -1,0 +1,14 @@
+{
+    "project_name": "H-API Client",
+    "description": "Tools and components for calling the H API",
+    "project_slug": "h-api",
+    "pkg_name": "h_api",
+    "options": {
+        "disable_replay": [
+            "README.md",
+            "setup.cfg",
+            "src/h_api/__init__.py"
+        ]
+    },
+    "_template": "gh:hypothesis/h-cookiecutter-pypackage"
+}
