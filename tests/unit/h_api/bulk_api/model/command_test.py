@@ -12,7 +12,7 @@ from h_api.bulk_api.model.command import (
 from h_api.bulk_api.model.config_body import Configuration
 from h_api.bulk_api.model.data_body import UpsertUser
 from h_api.enums import CommandType, DataType
-from h_api.exceptions import SchemaValidationError
+from h_api.exceptions import SchemaValidationError, UnsupportedOperationError
 from h_api.model.base import Model
 
 
@@ -54,16 +54,24 @@ class TestCommand:
         finally:
             model.validate.assert_called_once()
 
+    def test_stringification(self):
+        class CommandChild(Command):
+            validator = None
+            "Subclass to test stringification"
+
+        command = CommandChild.create(CommandType.CREATE, "body")
+
+        assert str(command) == "<CommandChild body>"
+
     def _check_command(self, command, body):
-        isinstance(command, Command)
+        assert isinstance(command, Command)
 
         assert command.type == CommandType.CREATE
         assert command.body == body
-
         assert command.raw == [CommandType.CREATE.value, body]
 
     @pytest.fixture
-    def model(self, upsert_user_body):
+    def model(self):
         return create_autospec(Model, instance=True)
 
 
@@ -96,7 +104,7 @@ class TestDataCommand:
         assert isinstance(command.body, UpsertUser)
 
     def test_we_cannot_create_another_type(self, UpsertUserCommand, upsert_group_body):
-        with pytest.raises(TypeError):
+        with pytest.raises(UnsupportedOperationError):
             UpsertUserCommand([CommandType.CREATE.value, upsert_group_body])
 
     @pytest.fixture
@@ -127,6 +135,16 @@ class TestUpsertCommand:
         for key in query.keys():
             assert key in upsert_command.body.meta["query"]
             assert key in upsert_command.body.attributes
+
+    def test_prepare_for_execute_does_not_merge_when_told_not_to(self, upsert_command):
+        query = deepcopy(upsert_command.body.meta["query"])
+
+        UpsertCommand.prepare_for_execute([upsert_command], {"merge_query": False})
+
+        assert upsert_command.body.query == query
+
+        for key in query.keys():
+            assert key not in upsert_command.body.attributes
 
     @pytest.fixture(params=[0, 1])
     def upsert_command(self, request, user_command, group_command):

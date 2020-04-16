@@ -36,15 +36,14 @@ class TestCommandProcessor:
         with pytest.raises(InvalidDeclarationError):
             command_processor.process(commands)
 
-    def test_it_fails_with_too_few_commands(
-        self, command_processor, commands, user_command
-    ):
+    def test_it_fails_with_too_few_commands(self, command_processor, commands):
         commands.pop()
 
         with pytest.raises(InvalidDeclarationError):
             command_processor.process(commands)
 
     def test_id_references_are_dereferenced(
+        # pylint: disable=too-many-arguments
         self,
         command_processor,
         config_command,
@@ -118,7 +117,7 @@ class TestCommandProcessor:
         )
 
     def test_items_are_prepared_for_the_executor(
-        self, command_processor, executor, config_command, group_command
+        self, command_processor, config_command, group_command
     ):
         config_command.body.defaults_for = create_autospec(
             config_command.body.defaults_for
@@ -147,8 +146,8 @@ class TestCommandProcessor:
         ),
     )
     def test_we_require_a_report_for_each_object(
-        self, command_processor, executor, commands, bad_reports, exception
-    ):
+        self, command_processor, executor, commands, bad_reports, exception,
+    ):  # pylint: disable=too-many-arguments
         executor.execute_batch.side_effect = None
         executor.execute_batch.return_value = bad_reports
 
@@ -166,14 +165,15 @@ class TestCommandProcessor:
             {DataType.USER: [Any.instance_of(Report)]}
         )
 
-    def test_reports_are_not_stored_if_view_is_None(
+    def test_reports_are_not_produced_or_stored_if_view_is_None(
         self, command_processor, commands, config_command
     ):
         assert config_command.body.view is ViewType.NONE
 
-        command_processor.process(commands)
+        result = command_processor.process(commands)
 
         assert not command_processor.reports
+        assert result is None
 
     def test_it_generates_basic_reports(
         self, command_processor, commands, config_command

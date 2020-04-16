@@ -9,17 +9,20 @@ from h_api.schema import Schema
 
 
 class Configuration(Model):
+    """Configuration settings for a Bulk API request."""
+
     validator = Schema.get_validator("bulk_api/command/configuration.json")
 
     WILD_CARD = "*"
 
     @classmethod
     def create(cls, effective_user, total_instructions, view=None):
-        """
-        Create a configuration object.
+        """Create a configuration object.
 
         :param effective_user: User to execute the command as
         :param total_instructions: Number of instructions (including this)
+        :param view: Return style requested by the client
+        :return: A Configuration object
         """
         return cls(
             {
@@ -35,26 +38,24 @@ class Configuration(Model):
 
     @property
     def view(self):
-        """The return type of view requested by the user."""
+        """Get the return type of view requested by the user."""
         return ViewType(self.raw["view"])
 
     @property
     def effective_user(self):
-        """The user to execute the request as."""
+        """Get the user to execute the request as."""
         return self.raw["user"]["effective"]
 
     @property
     def total_instructions(self):
-        """
-        The number of instructions in the request.
+        """Get the number of instructions in the request.
 
         This count includes configuration commands.
         """
         return self.raw["instructions"]["total"]
 
     def defaults_for(self, command_type, data_type):
-        """
-        Provide default configuration for the given command and data type.
+        """Provide default configuration for the given command and data type.
 
         This will use any wild card options first, overlaying more specific
         defaults as they are found.

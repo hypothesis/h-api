@@ -1,3 +1,5 @@
+"""Convenient access to the major components required to use the Bulk API."""
+
 from h_api.bulk_api.command_builder import CommandBuilder
 from h_api.bulk_api.entry_point import BulkAPI
 from h_api.bulk_api.executor import Executor

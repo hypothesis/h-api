@@ -7,8 +7,7 @@ from h_api.exceptions import UnpopulatedReferenceError
 
 
 class IdReferences:
-    """
-    A store of id references which can discover and populate them.
+    """A store of id references which can discover and populate them.
 
     If we create one object which relies on another (group membership on a
     group) we will not know the id of the group until the group has been
@@ -28,8 +27,7 @@ class IdReferences:
         self._ref_to_concrete = defaultdict(dict)
 
     def fill_out(self, body):
-        """
-        Find any references to ids in the data and fill them out.
+        """Find any references to ids in the data and fill them out.
 
         We are looking for items like this:
 
@@ -45,8 +43,7 @@ class IdReferences:
             data[data_key] = self._get_concrete_id(data_type, id_ref)
 
     def add_concrete_id(self, data_type, id_ref, concrete_id):
-        """
-        Add a concrete id for a reference.
+        """Add a concrete id for a reference.
 
         :data_type: Data type of the object being referenced
         :id_ref: The reference string
@@ -69,6 +66,7 @@ class IdReferences:
 
         :param body: Raw JSON API compatible data to search
         :return: A list of tuples with data type, reference, key and parent
+        :rtype: Iterator[tuple]
         """
 
         for relationship in body["data"].get("relationships", {}).values():
@@ -77,5 +75,4 @@ class IdReferences:
                 continue
 
             id_ref = relationship["id"].get(cls.REF_KEY)
-            if id_ref is not None:
-                yield (DataType(relationship["type"]), id_ref, "id", relationship)
+            yield (DataType(relationship["type"]), id_ref, "id", relationship)

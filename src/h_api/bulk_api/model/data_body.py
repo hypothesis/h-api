@@ -6,11 +6,26 @@ from h_api.schema import Schema
 
 
 class UpsertBody(JSONAPIData):
+    """Baseclass for upsert bodies with queries."""
+
     data_type = None
+    """The DataType this body represents."""
+
     query_fields = []
+    """Fields from the attributes to place into the query."""
 
     @classmethod
-    def create(cls, attributes, id_reference):
+    def create(cls, attributes, id_reference):  # pylint: disable=arguments-differ
+        """Create an upsert body with query.
+
+        This method will use the declared `data_type` and `query_fields` to
+        construct an upsert body with a query. This query will be generated
+        by popping the specified fields from the attributes provided.
+
+        :param attributes: The main payload (also used to create the query)
+        :param id_reference: The user provided reference for this object
+        :return: An UpsertBody instance
+        """
         query = {field: attributes.pop(field, None) for field in cls.query_fields}
 
         return super().create(
@@ -22,7 +37,7 @@ class UpsertBody(JSONAPIData):
 
     @property
     def query(self):
-        """The query used to select which item to update."""
+        """Get the query used to select which item to update."""
 
         return self.meta["query"]
 
@@ -49,13 +64,12 @@ class CreateGroupMembership(JSONAPIData):
     validator = Schema.get_validator("bulk_api/command/create_group_membership.json")
 
     @classmethod
-    def create(cls, user_ref, group_ref):
-        """
-        Create a create group membership body for adding users to groups.
+    def create(cls, user_ref, group_ref):  # pylint: disable=arguments-differ
+        """Create a create group membership body for adding users to groups.
 
         :param user_ref: Custom user reference
         :param group_ref: Custom group reference
-        :return:
+        :return: A CreateGroupMembership instance
         """
         return super().create(
             DataType.GROUP_MEMBERSHIP,
@@ -71,7 +85,7 @@ class CreateGroupMembership(JSONAPIData):
 
     @property
     def member(self):
-        """The user which is a member of this group.
+        """Get the user which is a member of this group.
 
         :return: A value object with `id` and `ref` properties.
         """
@@ -79,17 +93,20 @@ class CreateGroupMembership(JSONAPIData):
 
     @property
     def group(self):
-        """The group which this user is a member of.
+        """Get the group which this user is a member of.
 
         :return: A value object with `id` and `ref` properties.
         """
         return _IdRef(self.relationships["group"]["data"]["id"])
 
 
-class _IdRef:
+class _IdRef:  # pylint: disable=too-few-public-methods
     """A value object which represents an id reference or concrete id."""
 
     def __init__(self, value):
+        # pylint: disable=invalid-name
+        # We're using "id"... fight me
+
         if isinstance(value, dict):
             self.id, self.ref = None, value.get("$ref")
         else:

@@ -1,13 +1,14 @@
 """Implementations of an 'Executor' responsible for running bulk commands."""
+from abc import ABC, abstractmethod
+
 from h_api.bulk_api.model.report import Report
 
 
-class Executor:
+class Executor(ABC):
     """A callback to provide concrete functionality for actions in BulkJob."""
 
     def configure(self, config):
-        """
-        Configure the job from the provided config object.
+        """Configure the job from the provided config object.
 
         This is an opportunity for the executor to setup any global options
         required to process subsequent actions correctly. Typically this is
@@ -15,11 +16,10 @@ class Executor:
 
         :param config: A `Configuration` object
         """
-        pass
 
+    @abstractmethod
     def execute_batch(self, command_type, data_type, default_config, batch):
-        """
-        Execute the actions specified, returning any referenced ids.
+        """Execute the actions specified, returning any referenced ids.
 
         The implementer is expected to:
 
@@ -34,11 +34,9 @@ class Executor:
         :param batch: A list of Command models
         :return: A list of `Report` objects
         """
-        raise NotImplementedError()
 
     def get_items(self, data_type, ids, config):
-        """
-        Return the items identified by `ids`.
+        """Return the items identified by `ids`.
 
         The items returned should be in the same order as requested in `ids`.
 
@@ -51,8 +49,6 @@ class Executor:
         :param config: A dict of configuration options to modify processing
         :return: An iterable of data objects
         """
-
-        pass
 
 
 class AutomaticReportExecutor(Executor):

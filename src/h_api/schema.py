@@ -16,7 +16,6 @@ class Validator(Draft7Validator):
 
         :param instance: The instance to check
         :param error_title: Custom error message when errors are found
-        :return: None
         :raise SchemaValidationError: When errors are found
         """
 
@@ -32,13 +31,12 @@ class Validator(Draft7Validator):
 class Schema:
     """JSON Schema loader."""
 
-    BASE_DIR = resource_filename("h", "h_api/resources/schema/")
+    BASE_DIR = resource_filename("h_api", "resources/schema/")
     LOCAL_RESOLVER = RefResolver(base_uri="file://" + BASE_DIR, referrer=None)
 
     @classmethod
     def get_schema(cls, relative_path):
-        """
-        Load a schema object as a plain dict
+        """Load a schema object as a plain dict.
 
         :param relative_path: Path to the schema object
         :return: A dict representing the schema
@@ -59,5 +57,6 @@ class Schema:
             my_schema.json#/$defs/myObject
 
         :param relative_path: Path to the schema object
+        :return: A Validator object
         """
         return Validator({"$ref": relative_path}, resolver=cls.LOCAL_RESOLVER)

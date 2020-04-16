@@ -1,3 +1,5 @@
+"""Command wrappers which contain payload bodies."""
+
 from copy import deepcopy
 from functools import lru_cache
 
@@ -8,6 +10,7 @@ from h_api.bulk_api.model.data_body import (
     UpsertUser,
 )
 from h_api.enums import CommandType, DataType
+from h_api.exceptions import UnsupportedOperationError
 from h_api.model.base import Model
 from h_api.schema import Schema
 
@@ -18,7 +21,8 @@ class Command(Model):
     validator = Schema.get_validator("bulk_api/wrapper.json")
     validation_error_title = "Cannot interpret command as the wrapper is malformed"
 
-    def validate(self):
+    def validate(self):  # pylint: disable=arguments-differ
+        """Validate this object and it's body meet their declared schema."""
         super().validate()
 
         if isinstance(self.body, Model):
@@ -26,8 +30,7 @@ class Command(Model):
 
     @classmethod
     def create(cls, type_, body):
-        """
-        Create a command.
+        """Create a command.
 
         :param type_: The CommandType of the command
         :param body: The payload for the command
@@ -37,8 +40,7 @@ class Command(Model):
 
     @property
     def type(self):
-        """
-        Get the command type.
+        """Get the command type.
 
         :return: The CommandType of this command
         """
@@ -46,8 +48,7 @@ class Command(Model):
 
     @property
     def body(self):
-        """
-        Get the body of this command.
+        """Get the body of this command.
 
         :return: The raw body
         """
@@ -61,9 +62,8 @@ class ConfigCommand(Command):
     """A command containing job configuration instructions."""
 
     @classmethod
-    def create(cls, config):
-        """
-        Create a new ConfigCommand from a configuration instance.
+    def create(cls, config):  # pylint: disable=arguments-differ
+        """Create a new ConfigCommand from a configuration instance.
 
         :param config: A Configuration object
         :return: A ConfigCommand containing that config
@@ -73,8 +73,7 @@ class ConfigCommand(Command):
     @property
     @lru_cache(1)
     def body(self):
-        """
-        Get the body of this command.
+        """Get the body of this command.
 
         :return: A Configuration object
         """
@@ -97,22 +96,23 @@ class DataCommand(Command):
     @property
     @lru_cache(1)
     def body(self):
-        """
-        Get the appropriate body object for this command,
+        """Get the appropriate body object for this command.
 
         :return: A different class depending on `DataType` and `data_classes`
-        :raise KeyError: If no type can be found for the given `DataType`
+        :raise UnsupportedOperationError: If no type can be found for the
+                                          given `DataType`
         """
         body = super().body
 
         data_type = DataType(body["data"]["type"])
 
         try:
+            # pylint: disable=unsubscriptable-object
+            # It's subscriptable if child classes have set it to a dict
             class_ = self.data_classes[data_type]
 
         except KeyError:
-            # TODO! A custom error would be nice here
-            raise TypeError("Invalid action on data type")
+            raise UnsupportedOperationError("Invalid action on data type")
 
         # Don't validate this all the time, we did it on the way in. If we have
         # mutated it it might not match the schema we except from clients, but
@@ -130,7 +130,6 @@ class DataCommand(Command):
         :param default_config: A dict of configuration global to all commands
                                in the batch
         """
-        pass
 
 
 class CreateCommand(DataCommand):
@@ -149,6 +148,8 @@ class UpsertCommand(DataCommand):
 
     @classmethod
     def prepare_for_execute(cls, batch, default_config):
+        """Merge the query into the attributes for exectution."""
+
         # Pop out this command as it's just for us
         merge_query = default_config.pop("merge_query", None)
 
@@ -157,8 +158,7 @@ class UpsertCommand(DataCommand):
 
         for command in batch:
             query = command.body.meta.get("query")
-            if not query:
-                continue
+            assert query, "Query found for command"
 
             new_attrs = deepcopy(query)
             new_attrs.update(command.body.attributes)

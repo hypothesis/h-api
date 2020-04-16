@@ -11,9 +11,8 @@ from h_api.exceptions import CommandSequenceError, InvalidDeclarationError
 from h_api.model.json_api import JSONAPIData
 
 
-class CommandProcessor:
-    """
-    Manager which will check and run a number of bulk API commands.
+class CommandProcessor:  # pylint: disable=too-few-public-methods
+    """Manager which will check and run a number of bulk API commands.
 
     The manager is responsible for:
 
@@ -24,7 +23,8 @@ class CommandProcessor:
     """
 
     def __init__(self, executor, observer=None, batch_size=100):
-        """
+        """Create a new command procesor.
+
         :param executor: An executor to carry out commands
         :param observer: An observer to view commands
         :param batch_size: Commands to wait for before executing
@@ -56,6 +56,10 @@ class CommandProcessor:
 
         self._check_command_count(final=True)
 
+        if not self.reports or self.config.view is ViewType.NONE:
+            # Nothing to report!
+            return None
+
         return self._report_back()
 
     def _process_single_command(self, command):
@@ -85,8 +89,8 @@ class CommandProcessor:
     def _add_to_batch(self, command):
         """Add a single command to the batch.
 
-This may cause the CommandBatcher to call the on_flush() callback that we passed to it
-(self._execute_batch()) if it decides that it's time to execute the next batch.
+        This may cause the CommandBatcher to call the on_flush() callback that we passed to it
+        (self._execute_batch()) if it decides that it's time to execute the next batch.
         """
 
         if self.config is None:
@@ -103,6 +107,11 @@ This may cause the CommandBatcher to call the on_flush() callback that we passed
         """Check the command count matches expectations.
 
         :param final: This is the final count check, not incremental
+
+        :raise CommandSequenceError: When performing final count with no
+                                     commands
+        :raise InvalidDeclarationError: When commands processed do not match
+                                        the declared amount
         """
 
         total = self.config.total_instructions if self.config else None
@@ -154,12 +163,14 @@ This may cause the CommandBatcher to call the on_flush() callback that we passed
         self._process_reports(data_type, batch, reports)
 
     def _process_reports(self, data_type, batch, reports):
-        """
-        Store reports and update id references returned by the executor.
+        """Store reports and update id references returned by the executor.
 
         :param data_type: The data type these references are for
         :param batch: The batch of commands containing id references
         :param reports: A list of Report objects
+
+        :raise TypeError: If the passed reports are not Report obejcts
+        :raise IndexError: If the number of reports does not match the batch
         """
         if not isinstance(reports, list) or any(
             not isinstance(item, Report) for item in reports
@@ -182,14 +193,6 @@ This may cause the CommandBatcher to call the on_flush() callback that we passed
             self.reports[data_type].extend(reports)
 
     def _report_back(self):
-        if not self.reports or self.config.view is ViewType.NONE:
-            # Nothing to report!
-            return
-
-        if self.config.view is not ViewType.BASIC:
-            # This shouldn't be possible, but belt and braces
-            raise ValueError(f"Unknown configuration view type {self.config.view}")
-
         for data_type, reports in self.reports.items():
             for report in reports:
                 yield JSONAPIData.create(data_type=data_type, _id=report.public_id).raw

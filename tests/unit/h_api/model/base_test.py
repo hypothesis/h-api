@@ -29,6 +29,11 @@ class TestModel:
         with pytest.raises(SchemaValidationError):
             ValidatingModel("I am not a number")
 
+    def test_it_does_nothing_without_a_validator(self, ValidatingModel):
+        ValidatingModel.validator = None
+
+        ValidatingModel("I am not a number")
+
     def test_it_passes_validation_message_with_errors(self, ValidatingModel):
         ValidatingModel.validation_error_title = "custom message"
 
@@ -36,6 +41,14 @@ class TestModel:
             ValidatingModel("I am not a number")
 
         assert "custom message" in str(error.value)
+
+    def test_stringification(self):
+        class ChildClass(Model):
+            """A subclass to test stringification."""
+
+        model = ChildClass("body")
+
+        assert str(model) == "<ChildClass: body>"
 
     @pytest.fixture
     def ValidatingModel(self):
