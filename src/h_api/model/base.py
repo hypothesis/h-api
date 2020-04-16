@@ -1,3 +1,6 @@
+"""The base class for other model objects based on a raw data structure."""
+
+
 class Model:
     """An object backed by a plain data structure.
 
@@ -13,7 +16,8 @@ class Model:
     validation_error_title = None
 
     def __init__(self, raw, validate=True):
-        """
+        """Create a model.
+
         :param raw: The raw data to add to this object
         """
         self.raw = raw
@@ -22,8 +26,7 @@ class Model:
             self.validate()
 
     def validate(self, error_title=None):
-        """
-        Validate the contents of this object against the schema (if any)
+        """Validate the contents of this object against the schema (if any).
 
         If `validation_error_title` is set, then this will be used as a default
         `error_title`.
@@ -49,7 +52,8 @@ class Model:
     def dict_from_populated(cls, **kwargs):
         """Get a dict where keys only appear if the values are not None.
 
-        This is quite convenient for a lot of models."""
+        This is quite convenient for a lot of models.
+        """
         return {key: value for key, value in kwargs.items() if value is not None}
 
     def __repr__(self):

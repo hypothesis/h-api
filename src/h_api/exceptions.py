@@ -1,3 +1,5 @@
+"""Shared exceptions used in H-API."""
+
 from h_api.model.json_api import JSONAPIError as JSONAPIErrorModel
 from h_api.model.json_api import JSONAPIErrorBody
 
@@ -13,16 +15,17 @@ class JSONAPIError(HAPIError):
 
     def _error_bodies(self):
         """Get the instances of JSONAPIErrorBody representing this error."""
+
         raise NotImplementedError()
 
     def as_dict(self):
         """Get a JSON API compatible dict representing this error."""
+
         return JSONAPIErrorModel.create(self._error_bodies()).raw
 
 
 class SimpleJSONAPIError(JSONAPIError):
-    """
-    An error with a single message which can be formatted as JSON API data.
+    """An error with a single message which can be formatted as JSON API data.
 
     This takes the type of this exception and the stringification as the
     message, and is intended to make it easy to create simple exceptions.
@@ -64,6 +67,11 @@ class UnpopulatedReferenceError(SimpleJSONAPIError):
     http_status = 400
 
     def __init__(self, data_type, reference):
+        """Create a new unpopulated reference error.
+
+        :param data_type: Data type with a missing reference
+        :param reference: Reference string that was missing
+        """
         super().__init__(
             f"No concrete id found for '{data_type}' reference '{reference}'"
         )
@@ -81,7 +89,8 @@ class SchemaValidationError(JSONAPIError):
     http_status = 400
 
     def __init__(self, errors, title=None):
-        """
+        """Create a new schema validation error.
+
         :param errors: List of jsonschema.exceptions.ValidationError errors
         :param title: Custom title for the exception
         """
@@ -109,6 +118,7 @@ class SchemaValidationError(JSONAPIError):
     @staticmethod
     def _path_to_string(path):
         """Convert a `deque` path from jsonschema to a string."""
+
         return "/".join(str(item) for item in path)
 
     def __str__(self):

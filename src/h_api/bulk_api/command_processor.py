@@ -12,8 +12,7 @@ from h_api.model.json_api import JSONAPIData
 
 
 class CommandProcessor:
-    """
-    Manager which will check and run a number of bulk API commands.
+    """Manager which will check and run a number of bulk API commands.
 
     The manager is responsible for:
 
@@ -24,7 +23,8 @@ class CommandProcessor:
     """
 
     def __init__(self, executor, observer=None, batch_size=100):
-        """
+        """Create a new command procesor.
+
         :param executor: An executor to carry out commands
         :param observer: An observer to view commands
         :param batch_size: Commands to wait for before executing
@@ -85,8 +85,8 @@ class CommandProcessor:
     def _add_to_batch(self, command):
         """Add a single command to the batch.
 
-This may cause the CommandBatcher to call the on_flush() callback that we passed to it
-(self._execute_batch()) if it decides that it's time to execute the next batch.
+        This may cause the CommandBatcher to call the on_flush() callback that we passed to it
+        (self._execute_batch()) if it decides that it's time to execute the next batch.
         """
 
         if self.config is None:
@@ -154,8 +154,7 @@ This may cause the CommandBatcher to call the on_flush() callback that we passed
         self._process_reports(data_type, batch, reports)
 
     def _process_reports(self, data_type, batch, reports):
-        """
-        Store reports and update id references returned by the executor.
+        """Store reports and update id references returned by the executor.
 
         :param data_type: The data type these references are for
         :param batch: The batch of commands containing id references

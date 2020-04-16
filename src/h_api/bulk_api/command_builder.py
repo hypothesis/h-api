@@ -38,8 +38,7 @@ class CommandBuilder:
 
     @classmethod
     def configure(cls, effective_user, total_instructions, view=ViewType.NONE):
-        """
-        Create a configuration command.
+        """Create a configuration command.
 
         :param effective_user: The user to execute actions as
         :param total_instructions: The total number of instructions
@@ -54,8 +53,7 @@ class CommandBuilder:
 
         @classmethod
         def upsert(cls, attributes, id_reference):
-            """
-            Create a user upsert command.
+            """Create a user upsert command.
 
             :param attributes: Dict of user fields and values
             :param id_reference: Custom reference to this user
@@ -70,8 +68,7 @@ class CommandBuilder:
 
         @classmethod
         def upsert(cls, attributes, id_reference):
-            """
-            Create a group upsert command.
+            """Create a group upsert command.
 
             :param attributes: Dict of group fields and values
             :param id_reference: Custom reference to this group
@@ -86,8 +83,7 @@ class CommandBuilder:
 
         @classmethod
         def create(cls, user_ref, group_ref):
-            """
-            Create a group membership create.
+            """Create a group membership create.
 
             As the group and user ids are not known at command creation time,
             a custom reference can be supplied to the group which is then used

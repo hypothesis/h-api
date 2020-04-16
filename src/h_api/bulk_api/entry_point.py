@@ -16,8 +16,7 @@ class BulkAPI:
 
     @classmethod
     def from_lines(cls, lines, executor, observer=None):
-        """
-        Read from a stream of lines where each line is one command.
+        """Read from a stream of lines where each line is one command.
 
         :param lines: An iterator of strings
         :param executor: `Executor` to process batches of commands
@@ -38,8 +37,7 @@ class BulkAPI:
 
     @classmethod
     def from_string(cls, string, executor, observer=None):
-        """
-        Read from a string of NDJSON.
+        """Read from a string of NDJSON.
 
         Convenience wrapper for `from_lines`.
         """
@@ -48,8 +46,7 @@ class BulkAPI:
 
     @classmethod
     def from_byte_stream(cls, byte_stream, executor, observer=None):
-        """
-        Read from a stream of NDJSON bytes.
+        """Read from a stream of NDJSON bytes.
 
         Convenience wrapper for `from_lines`.
         """
@@ -58,8 +55,7 @@ class BulkAPI:
 
     @classmethod
     def to_stream(cls, handle, commands):
-        """
-        Check a series of commands for correctness and stream to NDJSON.
+        """Check a series of commands for correctness and stream to NDJSON.
 
         :param handle: File-like object to write NDJSON to
         :param commands: Iterator of commands to process
@@ -73,8 +69,7 @@ class BulkAPI:
 
     @classmethod
     def to_string(cls, commands):
-        """
-        Check a series of commands for correctness and create an NDJSON string.
+        """Check a series of commands for correctness and create an NDJSON string.
 
         Convenience wrapper for `to_stream`.
         """

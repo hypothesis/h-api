@@ -37,8 +37,7 @@ class Schema:
 
     @classmethod
     def get_schema(cls, relative_path):
-        """
-        Load a schema object as a plain dict
+        """Load a schema object as a plain dict.
 
         :param relative_path: Path to the schema object
         :return: A dict representing the schema

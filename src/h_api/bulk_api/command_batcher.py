@@ -14,7 +14,8 @@ class CommandBatcher:
     """
 
     def __init__(self, on_flush, batch_size=100):
-        """
+        """Create a new command batcher.
+
         :param on_flush: Callback to call when it's time to execute
         :param batch_size: The max size of a batch
         """
@@ -40,8 +41,7 @@ class CommandBatcher:
 
     @contextmanager
     def add(self, command):
-        """
-        A context manager for adding a command to the batch.
+        """Add a command to the batch using a context manager.
 
         Making this a context manager allows us to do the prep-work we need
         to before and after a command is added.

@@ -1,3 +1,5 @@
+"""Command wrappers which contain payload bodies."""
+
 from copy import deepcopy
 from functools import lru_cache
 
@@ -19,6 +21,7 @@ class Command(Model):
     validation_error_title = "Cannot interpret command as the wrapper is malformed"
 
     def validate(self):
+        """Validate this object and it's body meet their declared schema."""
         super().validate()
 
         if isinstance(self.body, Model):
@@ -26,8 +29,7 @@ class Command(Model):
 
     @classmethod
     def create(cls, type_, body):
-        """
-        Create a command.
+        """Create a command.
 
         :param type_: The CommandType of the command
         :param body: The payload for the command
@@ -37,8 +39,7 @@ class Command(Model):
 
     @property
     def type(self):
-        """
-        Get the command type.
+        """Get the command type.
 
         :return: The CommandType of this command
         """
@@ -46,8 +47,7 @@ class Command(Model):
 
     @property
     def body(self):
-        """
-        Get the body of this command.
+        """Get the body of this command.
 
         :return: The raw body
         """
@@ -62,8 +62,7 @@ class ConfigCommand(Command):
 
     @classmethod
     def create(cls, config):
-        """
-        Create a new ConfigCommand from a configuration instance.
+        """Create a new ConfigCommand from a configuration instance.
 
         :param config: A Configuration object
         :return: A ConfigCommand containing that config
@@ -73,8 +72,7 @@ class ConfigCommand(Command):
     @property
     @lru_cache(1)
     def body(self):
-        """
-        Get the body of this command.
+        """Get the body of this command.
 
         :return: A Configuration object
         """
@@ -97,8 +95,7 @@ class DataCommand(Command):
     @property
     @lru_cache(1)
     def body(self):
-        """
-        Get the appropriate body object for this command,
+        """Get the appropriate body object for this command.
 
         :return: A different class depending on `DataType` and `data_classes`
         :raise KeyError: If no type can be found for the given `DataType`
@@ -149,6 +146,8 @@ class UpsertCommand(DataCommand):
 
     @classmethod
     def prepare_for_execute(cls, batch, default_config):
+        """Merge the query into the attributes for exectution."""
+
         # Pop out this command as it's just for us
         merge_query = default_config.pop("merge_query", None)
 

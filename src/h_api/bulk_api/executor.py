@@ -6,8 +6,7 @@ class Executor:
     """A callback to provide concrete functionality for actions in BulkJob."""
 
     def configure(self, config):
-        """
-        Configure the job from the provided config object.
+        """Configure the job from the provided config object.
 
         This is an opportunity for the executor to setup any global options
         required to process subsequent actions correctly. Typically this is
@@ -18,8 +17,7 @@ class Executor:
         pass
 
     def execute_batch(self, command_type, data_type, default_config, batch):
-        """
-        Execute the actions specified, returning any referenced ids.
+        """Execute the actions specified, returning any referenced ids.
 
         The implementer is expected to:
 
@@ -37,8 +35,7 @@ class Executor:
         raise NotImplementedError()
 
     def get_items(self, data_type, ids, config):
-        """
-        Return the items identified by `ids`.
+        """Return the items identified by `ids`.
 
         The items returned should be in the same order as requested in `ids`.
 

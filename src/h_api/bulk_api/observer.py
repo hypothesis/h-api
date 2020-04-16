@@ -10,10 +10,13 @@ class Observer:
     """A callback for being informed of every command processed by BulkJob.
 
     This implementation serves as the base class and takes no action when
-    informed of a command."""
+    informed of a command.
+    """
 
     def observe_command(self, command, status):
-        """A call back for various stages in the command life cycle.
+        """Take any required action when provided with a command.
+
+        A call back for various stages in the command life cycle.
 
         :param command: Command being inspected
         :param status: Status of the command
@@ -25,13 +28,15 @@ class SerialisingObserver(Observer):
     """An Observer which serialises commands to provided handle."""
 
     def __init__(self, handle):
-        """
+        """Create the observer.
+
         :param handle: A file like object
         """
         self.handle = handle
 
     def observe_command(self, command, status):
         """Write all commands the handle as JSON."""
+
         if status != CommandStatus.AS_RECEIVED:
             return
 

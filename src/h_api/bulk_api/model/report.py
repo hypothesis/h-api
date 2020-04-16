@@ -5,7 +5,8 @@ class Report:
     """A model for reporting the result of database modification."""
 
     def __init__(self, id_, public_id=None):
-        """
+        """Create a report.
+
         :param id_: The id of the updated resource
         :param public_id: The user friendly id of the resource
         """

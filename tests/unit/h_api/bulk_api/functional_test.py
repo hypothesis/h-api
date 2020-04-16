@@ -48,7 +48,8 @@ class TestBulkAPIFunctional:
     def test_command_serialisation_ok(self, commands):
         """A sanity check that hits most of the behavior of creation.
 
-        This is a happy path check. We expect this to work."""
+        This is a happy path check. We expect this to work.
+        """
 
         ndjson = BulkAPI.to_string(commands)
         lines = ndjson.strip().split("\n")

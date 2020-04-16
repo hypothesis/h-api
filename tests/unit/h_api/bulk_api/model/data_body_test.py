@@ -12,6 +12,8 @@ from h_api.exceptions import SchemaValidationError
 
 class TestUpsertBody:
     class Subclass(UpsertBody):
+        """A pretend upsert body for testing."""
+
         data_type = DataType.GROUP
         query_fields = ["query_field"]
 
