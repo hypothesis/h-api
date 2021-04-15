@@ -43,7 +43,7 @@ class CookieCutter:
 
         temp_dir = mkdtemp()
 
-        try:
+        try:  # pylint:disable=too-many-try-statements
             project_name = cls.render_template(temp_dir, config, template)
             current_name = os.path.basename(project_dir)
 
