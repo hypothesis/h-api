@@ -1,4 +1,4 @@
 # Make sure source distributions have the license
 include LICENSE
 
-graft src/h_api/resources
+graft src/h_api/resources 
