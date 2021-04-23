@@ -57,8 +57,8 @@ class IdReferences:
         data_type = DataType(data_type)
         try:
             return self._ref_to_concrete[data_type][id_ref]
-        except KeyError:
-            raise UnpopulatedReferenceError(data_type, id_ref)
+        except KeyError as err:
+            raise UnpopulatedReferenceError(data_type, id_ref) from err
 
     @classmethod
     def _find_references(cls, body):

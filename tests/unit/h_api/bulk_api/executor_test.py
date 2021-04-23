@@ -10,7 +10,8 @@ from h_api.enums import CommandType
 
 class TestAutomaticReportExecutor:
     @pytest.mark.parametrize(
-        "command_type", (CommandType.CREATE, CommandType.UPSERT),
+        "command_type",
+        (CommandType.CREATE, CommandType.UPSERT),
     )
     def test_execute_batch_returns_an_appropriate_type(self, command_type):
         results = AutomaticReportExecutor().execute_batch(
