@@ -1,4 +1,5 @@
-"""Tools for deserialising and creating command objects."""
+"""Tools for deserializing and creating command objects."""
+
 from h_api.bulk_api.model.command import (
     Command,
     ConfigCommand,

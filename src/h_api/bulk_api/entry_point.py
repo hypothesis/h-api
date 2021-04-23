@@ -108,7 +108,7 @@ class BulkAPI:
             except JSONDecodeError as err:
                 raise InvalidJSONError(
                     f"Invalid JSON on line {line_number}: {err.args[0]}"
-                )
+                ) from err
 
             # Try catch JSON errors here
             yield CommandBuilder.from_data(data)

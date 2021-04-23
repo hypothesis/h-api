@@ -111,8 +111,8 @@ class DataCommand(Command):
             # It's subscriptable if child classes have set it to a dict
             class_ = self.data_classes[data_type]
 
-        except KeyError:
-            raise UnsupportedOperationError("Invalid action on data type")
+        except KeyError as err:
+            raise UnsupportedOperationError("Invalid action on data type") from err
 
         # Don't validate this all the time, we did it on the way in. If we have
         # mutated it it might not match the schema we except from clients, but

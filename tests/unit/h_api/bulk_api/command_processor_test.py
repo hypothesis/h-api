@@ -146,7 +146,12 @@ class TestCommandProcessor:
         ),
     )
     def test_we_require_a_report_for_each_object(
-        self, command_processor, executor, commands, bad_reports, exception,
+        self,
+        command_processor,
+        executor,
+        commands,
+        bad_reports,
+        exception,
     ):  # pylint: disable=too-many-arguments
         executor.execute_batch.side_effect = None
         executor.execute_batch.return_value = bad_reports
