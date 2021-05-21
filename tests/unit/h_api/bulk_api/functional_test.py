@@ -2,9 +2,9 @@ import json
 from io import BytesIO
 from unittest.mock import call
 
+import importlib_resources
 import pytest
 from h_matchers import Any
-from pkg_resources import resource_string
 
 from h_api.bulk_api import BulkAPI, CommandBuilder
 from h_api.bulk_api.executor import AutomaticReportExecutor
@@ -101,4 +101,8 @@ class TestBulkAPIFunctional:
 
     @pytest.fixture
     def ndjson_bytes(self):
-        return BytesIO(resource_string("tests", "unit/h_api/fixtures/bulk_api.ndjson"))
+        return BytesIO(
+            importlib_resources.read_binary(
+                "tests.unit.h_api.fixtures", "bulk_api.ndjson"
+            )
+        )

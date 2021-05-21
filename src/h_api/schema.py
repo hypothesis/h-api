@@ -2,8 +2,8 @@
 
 from functools import lru_cache
 
+import importlib_resources
 from jsonschema import Draft7Validator, RefResolver
-from pkg_resources import resource_filename
 
 from h_api.exceptions import SchemaValidationError
 
@@ -31,8 +31,8 @@ class Validator(Draft7Validator):
 class Schema:
     """JSON Schema loader."""
 
-    BASE_DIR = resource_filename("h_api", "resources/schema/")
-    LOCAL_RESOLVER = RefResolver(base_uri="file://" + BASE_DIR, referrer=None)
+    BASE_DIR = str(importlib_resources.files("h_api") / "resources/schema")
+    LOCAL_RESOLVER = RefResolver(base_uri=f"file://{BASE_DIR}/", referrer=None)
 
     @classmethod
     def get_schema(cls, relative_path):
