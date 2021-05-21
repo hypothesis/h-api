@@ -4,9 +4,9 @@ from io import BytesIO, StringIO
 from types import GeneratorType
 from unittest.mock import sentinel
 
+import importlib_resources
 import pytest
 from h_matchers import Any
-from pkg_resources import resource_string
 
 from h_api.bulk_api import BulkAPI
 from h_api.bulk_api.model.command import Command
@@ -117,8 +117,8 @@ class TestBulkAPI:
 
     @pytest.fixture
     def nd_json(self):
-        return resource_string("tests", "unit/h_api/fixtures/bulk_api.ndjson").decode(
-            "utf-8"
+        return importlib_resources.read_text(
+            "tests.unit.h_api.fixtures", "bulk_api.ndjson"
         )
 
     @pytest.fixture
