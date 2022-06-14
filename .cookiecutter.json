@@ -11,5 +11,6 @@
             "MANIFEST.in"
         ]
     },
-    "_template": "gh:hypothesis/h-cookiecutter-pypackage"
+    "_template": "gh:hypothesis/h-cookiecutter-pypackage",
+    "_output_dir": "/tmp/tmp924pm0yw"
 }
