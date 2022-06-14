@@ -101,8 +101,8 @@ class TestBulkAPIFunctional:
 
     @pytest.fixture
     def ndjson_bytes(self):
-        return BytesIO(
-            importlib_resources.read_binary(
-                "tests.unit.h_api.fixtures", "bulk_api.ndjson"
-            )
+        bulk_api_ndjson = (
+            importlib_resources.files("tests.unit.h_api.fixtures") / "bulk_api.ndjson"
         )
+
+        return BytesIO(bulk_api_ndjson.read_bytes())
