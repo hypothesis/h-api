@@ -117,9 +117,11 @@ class TestBulkAPI:
 
     @pytest.fixture
     def nd_json(self):
-        return importlib_resources.read_text(
-            "tests.unit.h_api.fixtures", "bulk_api.ndjson"
+        bulk_api_ndjson = (
+            importlib_resources.files("tests.unit.h_api.fixtures") / "bulk_api.ndjson"
         )
+
+        return bulk_api_ndjson.read_text(encoding="utf-8")
 
     @pytest.fixture
     def nd_json_byte_stream(self, nd_json):
