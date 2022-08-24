@@ -1,0 +1,23 @@
+{
+  "template": "https://github.com/hypothesis/cookiecutters",
+  "checkout": null,
+  "directory": "pypackage",
+  "ignore": ["src/h_api/core.py", "tests/unit/h_api/core_test.py"],
+  "extra_context": {
+    "name": "h-api",
+    "package_name": "h_api",
+    "slug": "h-api",
+    "short_description": "Tools and components for calling the H API.",
+    "python_versions": "3.9.4,3.8.9",
+    "github_owner": "hypothesis",
+    "copyright_holder": "Hypothesis",
+    "visibility": "public",
+    "console_script": "no",
+    "devdata": "no",
+    "services": "no",
+    "dependabot_pip_interval": "monthly",
+    "__entry_point": "h-api",
+    "__github_url": "https://github.com/hypothesis/h-api",
+    "__pypi_url": "https://pypi.org/project/h-api"
+  }
+}

@@ -21,7 +21,7 @@ class Command(Model):
     validator = Schema.get_validator("bulk_api/wrapper.json")
     validation_error_title = "Cannot interpret command as the wrapper is malformed"
 
-    def validate(self):  # pylint: disable=arguments-differ
+    def validate(self):
         """Validate this object and it's body meet their declared schema."""
         super().validate()
 

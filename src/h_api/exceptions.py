@@ -125,6 +125,5 @@ class SchemaValidationError(JSONAPIError):
     def __str__(self):
         details = (f"\n\t * {body.detail}" for body in self.error_bodies)
 
-        # pylint: disable=unsubscriptable-object
         # Not sure why this is happening, args is totally subscriptable
         return self.args[0] + ":" + "".join(details)
