@@ -8,8 +8,11 @@ from jsonschema import Draft7Validator, RefResolver
 from h_api.exceptions import SchemaValidationError
 
 
-class Validator(Draft7Validator):
+class Validator:  # pylint:disable=too-few-public-methods
     """A JSON schema validator."""
+
+    def __init__(self, *args, **kwargs):
+        self._validator = Draft7Validator(*args, **kwargs)
 
     def validate_all(self, instance, error_title="The data does not match the schema"):
         """Report all validation errors in the instance against this schema.
@@ -21,7 +24,7 @@ class Validator(Draft7Validator):
 
         errors = []
 
-        for error in self.iter_errors(instance):
+        for error in self._validator.iter_errors(instance):
             errors.append(error)
 
         if errors:
