@@ -93,7 +93,7 @@ Then to set up your development environment:
 
 ```terminal
 git clone https://github.com/hypothesis/h-api.git
-cd h_api
+cd h-api
 make help
 ```
 
