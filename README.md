@@ -1,4 +1,4 @@
-<a href="https://github.com/hypothesis/h-api/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://img.shields.io/github/workflow/status/hypothesis/h-api/CI/main"></a>
+<a href="https://github.com/hypothesis/h-api/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://img.shields.io/github/actions/workflow/status/hypothesis/h-api/ci.yml?branch=main"></a>
 <a href="https://pypi.org/project/h-api"><img src="https://img.shields.io/pypi/v/h-api"></a>
 <a><img src="https://img.shields.io/badge/python-3.9 | 3.8-success"></a>
 <a href="https://github.com/hypothesis/h-api/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-BSD--2--Clause-success"></a>
