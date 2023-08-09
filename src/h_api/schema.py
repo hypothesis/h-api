@@ -1,9 +1,12 @@
 """Classes for loading and parsing JSON schema."""
 
+
+import json
 from functools import lru_cache
 
 import importlib_resources
-from jsonschema import Draft7Validator, RefResolver
+from jsonschema import Draft7Validator
+from referencing import Registry, Resource
 
 from h_api.exceptions import SchemaValidationError
 
@@ -34,8 +37,13 @@ class Validator:  # pylint:disable=too-few-public-methods
 class Schema:
     """JSON Schema loader."""
 
-    BASE_DIR = str(importlib_resources.files("h_api") / "resources/schema")
-    LOCAL_RESOLVER = RefResolver(base_uri=f"file://{BASE_DIR}/", referrer=None)
+    BASE_DIR = importlib_resources.files("h_api") / "resources/schema"
+    LOCAL_REGISTRY = Registry(
+        retrieve=lambda uri: Resource.from_contents(
+            json.loads((Schema.BASE_DIR / uri).read_text())
+        )
+    )
+    RESOLVER = LOCAL_REGISTRY.resolver()
 
     @classmethod
     def get_schema(cls, relative_path):
@@ -45,9 +53,7 @@ class Schema:
         :return: A dict representing the schema
         """
 
-        _, schema = cls.LOCAL_RESOLVER.resolve(relative_path)
-
-        return schema
+        return cls.RESOLVER.lookup(relative_path).contents
 
     @classmethod
     @lru_cache(32)
@@ -62,4 +68,4 @@ class Schema:
         :param relative_path: Path to the schema object
         :return: A Validator object
         """
-        return Validator({"$ref": relative_path}, resolver=cls.LOCAL_RESOLVER)
+        return Validator({"$ref": relative_path}, registry=cls.LOCAL_REGISTRY)
