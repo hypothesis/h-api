@@ -14,7 +14,7 @@ class Report:  # pylint: disable=too-few-public-methods
         if id_ is None:
             raise ValueError("id_ is required for successful outcomes")
 
-        self.id = id_  # pylint: disable=invalid-name
+        self.id = id_
         self.public_id = id_ if public_id is None else public_id
 
     def __repr__(self):

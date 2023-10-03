@@ -86,7 +86,7 @@ class JSONAPIData(Model):
         )
 
     @property
-    def id(self):  # pylint: disable=invalid-name
+    def id(self):
         """Get the id."""
 
         return self._data["id"]

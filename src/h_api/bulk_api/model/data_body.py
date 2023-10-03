@@ -104,9 +104,6 @@ class _IdRef:  # pylint: disable=too-few-public-methods
     """A value object which represents an id reference or concrete id."""
 
     def __init__(self, value):
-        # pylint: disable=invalid-name
-        # We're using "id"... fight me
-
         if isinstance(value, dict):
             self.id, self.ref = None, value.get("$ref")
         else:
