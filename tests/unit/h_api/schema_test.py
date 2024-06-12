@@ -19,9 +19,9 @@ class TestValidator:
         assert isinstance(error, SchemaValidationError)
 
         assert [body.raw for body in error.error_bodies] == [
-            Any.dict.containing({"source": {"pointer": "a"}}),
-            Any.dict.containing(
-                {"meta": Any.dict.containing({"schema": {"pointer": "required"}})}
+            Any.dict().containing({"source": {"pointer": "a"}}),
+            Any.dict().containing(
+                {"meta": Any.dict().containing({"schema": {"pointer": "required"}})}
             ),
         ]
 

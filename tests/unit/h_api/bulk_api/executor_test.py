@@ -28,5 +28,5 @@ class TestAutomaticReportExecutor:
             batch=[sentinel.command, sentinel.command, sentinel.command],
         )
 
-        assert results == Any.list.comprised_of(Any.instance_of(Report)).of_size(3)
+        assert results == Any.list().comprised_of(Any.instance_of(Report)).of_size(3)
         assert len({report.id for report in results}) == 3
