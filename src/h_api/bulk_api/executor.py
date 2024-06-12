@@ -1,4 +1,5 @@
 """Implementations of an 'Executor' responsible for running bulk commands."""
+
 from abc import ABC, abstractmethod
 
 from h_api.bulk_api.model.report import Report
