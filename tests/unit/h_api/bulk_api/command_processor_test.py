@@ -166,7 +166,7 @@ class TestCommandProcessor:
 
         command_processor.process(commands)
 
-        assert command_processor.reports == Any.dict.containing(
+        assert command_processor.reports == Any.dict().containing(
             {DataType.USER: [Any.instance_of(Report)]}
         )
 

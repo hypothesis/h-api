@@ -59,9 +59,9 @@ class TestBulkAPIFunctional:
 
         assert command_data == [
             ["configure", Any.dict()],
-            ["upsert", {"data": Any.dict.containing({"type": "user"})}],
-            ["upsert", {"data": Any.dict.containing({"type": "group"})}],
-            ["create", {"data": Any.dict.containing({"type": "group_membership"})}],
+            ["upsert", {"data": Any.dict().containing({"type": "user"})}],
+            ["upsert", {"data": Any.dict().containing({"type": "group"})}],
+            ["create", {"data": Any.dict().containing({"type": "group_membership"})}],
         ]
 
     def test_round_tripping(self, commands, collecting_observer):

@@ -92,9 +92,9 @@ class TestBulkAPI:
         (generator,), _ = CommandProcessor.return_value.process.call_args
 
         assert isinstance(generator, GeneratorType)
-        assert generator == Any.iterable.comprised_of(Any.instance_of(Command)).of_size(
-            4
-        )
+        assert generator == Any.iterable().comprised_of(
+            Any.instance_of(Command)
+        ).of_size(4)
 
     def _decode_ndjson(self, nd_json):
         return [json.loads(data) for data in nd_json.strip().split("\n")]
