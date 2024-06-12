@@ -1,6 +1,5 @@
 """Classes for loading and parsing JSON schema."""
 
-
 import json
 from functools import lru_cache
 

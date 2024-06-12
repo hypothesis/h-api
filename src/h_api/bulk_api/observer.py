@@ -1,6 +1,5 @@
 """Implementations of an 'Observer' which is informed of commands."""
 
-
 import json
 
 from h_api.enums import CommandStatus

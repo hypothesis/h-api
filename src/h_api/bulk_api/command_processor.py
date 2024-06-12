@@ -1,4 +1,5 @@
 """Interface for processing batches of commands."""
+
 from collections import defaultdict
 
 from h_api.bulk_api.command_batcher import CommandBatcher
