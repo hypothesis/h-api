@@ -40,7 +40,7 @@ class Schema:
     LOCAL_REGISTRY = Registry(
         retrieve=lambda uri: Resource.from_contents(
             json.loads((Schema.BASE_DIR / uri).read_text())
-        )
+        )  # type: ignore
     )
     RESOLVER = LOCAL_REGISTRY.resolver()
 
