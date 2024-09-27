@@ -43,7 +43,7 @@ class TestCommandProcessor:
             command_processor.process(commands)
 
     def test_id_references_are_dereferenced(
-        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         command_processor,
         config_command,
@@ -152,7 +152,7 @@ class TestCommandProcessor:
         commands,
         bad_reports,
         exception,
-    ):  # pylint: disable=too-many-arguments
+    ):  # pylint: disable=too-many-arguments,too-many-positional-arguments
         executor.execute_batch.side_effect = None
         executor.execute_batch.return_value = bad_reports
 

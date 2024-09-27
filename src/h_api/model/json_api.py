@@ -20,7 +20,7 @@ class JSONAPIError(Model):
 class JSONAPIErrorBody(Model):
     """A JSON API error body."""
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     # I know pylint... I know
 
     @classmethod
@@ -53,7 +53,7 @@ class JSONAPIData(Model):
     # This would be nice but introduces a circular dependency with
     # Schema as it needs the error stuff above via SchemaValidationError
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
 
     @classmethod
     def create(
