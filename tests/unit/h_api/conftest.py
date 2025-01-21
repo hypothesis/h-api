@@ -61,7 +61,7 @@ def create_group_membership_body():
 def user_attributes(upsert_user_body):
     return dict(
         upsert_user_body["data"]["attributes"],
-        **upsert_user_body["data"]["meta"]["query"]
+        **upsert_user_body["data"]["meta"]["query"],
     )
 
 
@@ -69,7 +69,7 @@ def user_attributes(upsert_user_body):
 def group_attributes(upsert_group_body):
     return dict(
         upsert_group_body["data"]["attributes"],
-        **upsert_group_body["data"]["meta"]["query"]
+        **upsert_group_body["data"]["meta"]["query"],
     )
 
 
