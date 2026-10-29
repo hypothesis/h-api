@@ -53,8 +53,6 @@ class JSONAPIData(Model):
     # This would be nice but introduces a circular dependency with
     # Schema as it needs the error stuff above via SchemaValidationError
 
-    # pylint: disable=too-many-arguments,too-many-positional-arguments
-
     @classmethod
     def create(
         cls,
